@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#202c33">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>JDP SUPREME - WHATSAPP INDUSTRIAL</title>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -19,12 +21,13 @@
             --wa-bubble-them: #202c33;
             --wa-text: #e9edef;
             --wa-text-muted: #8696a0;
-            --sr-jose: #fde047;
+            --sr-jose: #fde047; /* Toque do Criador */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--wa-bg); color: var(--wa-text); font-family: 'Roboto', sans-serif; overflow: hidden; position: fixed; }
 
+        /* TELAS */
         .screen { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--wa-bg); z-index: 10; padding-bottom: 75px; }
         .active-screen { display: flex; }
 
@@ -32,34 +35,40 @@
         .header-title { color: var(--wa-text); font-size: 1.3rem; font-weight: 500; }
         .header-title span { color: var(--sr-jose); font-family: 'Orbitron'; font-size: 0.9rem; margin-left: 5px; }
 
+        /* LISTAS */
         .list-container { flex: 1; overflow-y: auto; }
         .item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
         .item:active { background: rgba(255,255,255,0.05); }
-        .avatar { width: 50px; height: 50px; border-radius: 50%; background: #4f5e64; margin-right: 15px; background-size: cover; background-position: center; flex-shrink: 0; position: relative; }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; background: #4f5e64; margin-right: 15px; background-size: cover; background-position: center; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
         .avatar::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
         .item-info { flex: 1; }
         .item-name { font-weight: 500; font-size: 1.05rem; display: flex; justify-content: space-between; }
         .item-time { font-size: 0.75rem; color: var(--wa-text-muted); }
         .item-sub { font-size: 0.85rem; color: var(--wa-text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* CHAT WINDOW */
         #chat-window { position: fixed; inset: 0; background: #0b141a; background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0); background-size: 24px 24px; z-index: 5000; display: none; flex-direction: column; }
         #chat-flow { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; -webkit-overflow-scrolling: touch; }
-                
+                           
+        /* BALÕES DE MENSAGEM */
         .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; font-size: 0.95rem; position: relative; word-wrap: break-word; line-height: 1.4; box-shadow: 0 1px 1px rgba(0,0,0,0.15); user-select: none; -webkit-user-select: none; cursor: pointer; }
         .msg-me { align-self: flex-end; background: var(--wa-bubble-me); border-top-right-radius: 0; }
         .msg-them { align-self: flex-start; background: var(--wa-bubble-them); border-top-left-radius: 0; }
         .msg img, .msg video { max-width: 100%; border-radius: 6px; margin-top: 4px; display: block; }
         .msg-time { font-size: 0.65rem; color: var(--wa-text-muted); float: right; margin-top: 4px; margin-left: 8px; }
 
+        /* FIGURINHA (STICKER) NO CHAT */
         .msg-sticker { background: transparent !important; box-shadow: none !important; padding: 0 !important; max-width: 130px !important; }
         .msg-sticker img { width: 130px; height: 130px; object-fit: contain; margin: 0 !important; }
 
+        /* INPUT AREA */
         .chat-input-area { padding: 6px 8px; background: var(--wa-panel); display: flex; align-items: center; gap: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); position: relative; z-index: 100; }
         .input-wrapper { flex: 1; background: var(--wa-input); border-radius: 24px; display: flex; align-items: center; padding: 0 8px; }
         .input-wrapper input { flex: 1; background: transparent; border: none; padding: 10px 6px; color: var(--wa-text); font-size: 1rem; }
         .btn-icon { background: none; border: none; color: var(--wa-text-muted); font-size: 1.4rem; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
         .btn-send { background: var(--wa-green); border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; flex-shrink: 0; }
 
+        /* GAVETA DE FIGURINHAS/GIFS */
         #sticker-drawer { height: 260px; background: var(--wa-panel); border-top: 1px solid rgba(255,255,255,0.05); display: none; flex-direction: column; z-index: 90; }
         .drawer-tabs { display: flex; background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .tab-btn { flex: 1; padding: 12px; background: none; border: none; color: var(--wa-text-muted); font-weight: bold; cursor: pointer; font-size: 0.9rem; }
@@ -69,17 +78,20 @@
         .drawer-item:active { background: rgba(255,255,255,0.1); }
         .drawer-item img { max-width: 90%; max-height: 90%; object-fit: contain; }
 
+        /* BOTTOM NAV */
         nav.bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: var(--wa-panel); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
         .nav-item { text-align: center; color: var(--wa-text-muted); font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .nav-item.active { color: var(--wa-green); }
         .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
 
+        /* CALL UI */
         #call-screen { position: fixed; inset: 0; background: #0f1c24; z-index: 6000; display: none; flex-direction: column; justify-content: space-between; align-items: center; padding: 60px 20px; }
-        .call-avatar { width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--wa-green); background-size: cover; background-position: center; }
+        .call-avatar { width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--wa-green); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: white; background-color: #4f5e64; }
         .call-btn { width: 60px; height: 60px; border-radius: 50%; border: none; color: white; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
         #sync-loader { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: var(--wa-green); color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: none; z-index: 10000; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
+        /* BANDEJA DE OPÇÕES DE MENSAGEM */
         #options-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 20000; align-items: flex-end; justify-content: center; }
         .options-container { background: var(--wa-panel); width: 100%; border-radius: 16px 16px 0 0; padding: 16px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -4px 10px rgba(0,0,0,0.5); animation: slideUp 0.2s ease-out; }
         .options-btn { background: none; border: none; color: var(--wa-text); font-size: 1.05rem; text-align: left; padding: 14px; display: flex; align-items: center; gap: 15px; cursor: pointer; border-radius: 8px; }
@@ -87,21 +99,16 @@
         .options-btn-danger { color: #ea4335 !important; }
         .options-divider { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; align-self: center; margin-bottom: 8px; }
 
-        #setup-overlay { position: fixed; inset: 0; background: var(--wa-bg); z-index: 30000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .setup-box { background: var(--wa-panel); padding: 30px; border-radius: 12px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); text-align: center; }
-        .setup-box h2 { color: var(--wa-text); margin: 0; font-family: 'Orbitron'; font-size: 1.2rem; }
-        .setup-box input { background: var(--wa-input); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: var(--wa-text); font-size: 1rem; width: 100%; }
-        .setup-box button { background: var(--wa-green); border: none; padding: 12px; border-radius: 8px; color: white; font-weight: bold; font-size: 1rem; cursor: pointer; }
-
-        /* ESTILO DO HISTÓRICO DE CHIPS INTEGRADO NO DESIGN SELADO */
-        .chip-history-title { color: var(--wa-text-muted); font-size: 0.75rem; text-transform: uppercase; text-align: left; margin-top: 10px; font-weight: bold; font-family: 'Orbitron'; letter-spacing: 1px; }
-        .chip-history-list { display: flex; flex-direction: column; gap: 8px; max-height: 120px; overflow-y: auto; text-align: left; }
-        .chip-history-item { background: var(--wa-input); border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .chip-history-item:active { background: rgba(255,255,255,0.1); }
-        .chip-history-item span { color: gold; font-weight: 500; font-size: 0.9rem; }
-        .chip-history-del { color: #ea4335 !important; font-size: 1.2rem; font-weight: bold; padding: 0 5px; cursor: pointer; }
-
-        #status-viewer { display: none; position: fixed; inset: 0; z-index: 7000; flex-direction: column; background: black; }
+        /* POPUP DE PERMISSÃO DE ARMAZENAMENTO */
+        #permission-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 30000; align-items: center; justify-content: center; padding: 20px; }
+        .permission-box { background: var(--wa-panel); border-radius: 12px; width: 100%; max-width: 320px; padding: 24px; text-align: center; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .permission-icon { font-size: 3rem; color: var(--wa-green); margin-bottom: 15px; }
+        .permission-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: var(--wa-text); }
+        .permission-desc { font-size: 0.9rem; color: var(--wa-text-muted); line-height: 1.5; margin-bottom: 24px; }
+        .permission-actions { display: flex; gap: 10px; }
+        .permission-btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .permission-btn-allow { background: var(--wa-green); color: white; }
+        .permission-btn-deny { background: rgba(255,255,255,0.05); color: var(--wa-text-muted); }
 
         @keyframes slideUp {
             from { transform: translateY(100%); }
@@ -111,52 +118,66 @@
 </head>
 <body>
 
-    <div id="sync-loader" style="color: gold;">CONECTADO À PONTE</div>
+    <div id="sync-loader">CONECTADO À PONTE</div>
 
-    <!-- TELA DE LOGIN INDUSTRIAL COM SELETOR MULTI-CHIP INTEGRADO -->
-    <div id="setup-overlay">
-        <div class="setup-box">
-            <h2>SISTEMA SOBERANO</h2>
-            <input type="text" id="chip-number" placeholder="ID (Ex: 92994776367)" value="92994776367">
-            <input type="password" id="chip-pass" placeholder="SENHA JDP">
-            <button onclick="autenticarSistema()">INJETAR</button>
-            
-            <div class="chip-history-title">Chips Conectados:</div>
-            <div class="chip-history-list" id="index-saved-list"></div>
+    <!-- POPUP DE SOLICITAÇÃO DE PERMISSÃO -->
+    <div id="permission-modal">
+        <div class="permission-box">
+            <div class="permission-icon">📁</div>
+            <div class="permission-title">Permissão de Acesso</div>
+            <div class="permission-desc">Para salvar fotos, áudios e vídeos recebidos diretamente na galeria do seu celular, o JDP SUPREME requer acesso de gravação ao armazenamento local.</div>
+            <div class="permission-actions">
+                <button class="permission-btn permission-btn-deny" onclick="negarPermissao()">Recusar</button>
+                <button class="permission-btn permission-btn-allow" onclick="concederPermissao()">Permitir</button>
+            </div>
         </div>
     </div>
 
-    <div id="screen-chats" class="screen active-screen">
-        <header>
-            <div class="header-title">WhatsApp <span style="color: gold;">HELENA Core</span></div>
-        </header>
-        <div class="list-container" id="chat-list"></div>
-        <div style="position:fixed; bottom:80px; right:20px; width:55px; height:55px; background:var(--wa-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; cursor:pointer; z-index:100; box-shadow: 0 4px 8px rgba(0,0,0,0.3);" onclick="abrirContatos()">+</div>
+    <!-- LOGIN INDUSTRIAL -->
+    <div id="setup-overlay" style="position:fixed; inset:0; background:var(--wa-bg); z-index:20000; display:flex; align-items:center; justify-content:center;">
+        <div style="width:85%; text-align:center;">
+            <h1 style="font-family:'Orbitron'; color:var(--sr-jose); margin-bottom: 5px;">JDP SUPREME</h1>
+            <p style="color: var(--wa-green); font-size: 0.8rem; margin-bottom: 30px; letter-spacing: 1px;">SISTEMA DE MANTENEDORA VIVA</p>
+            <input type="text" id="chip-number" placeholder="NÚMERO DO CHIP" style="width:100%; padding:14px; margin-bottom:10px; background:var(--wa-panel); border:1px solid rgba(255,255,255,0.1); color:white; text-align:center; border-radius: 8px;">
+            <input type="password" id="key-input" placeholder="SENHA DO CHIP" style="width:100%; padding:14px; margin-bottom:20px; background:var(--wa-panel); border:1px solid rgba(255,255,255,0.1); color:white; text-align:center; border-radius: 8px;">
+            <button onclick="autenticar()" style="width:100%; padding:14px; background:var(--wa-green); border:none; font-weight:bold; cursor:pointer; border-radius: 8px; color: white;">ATIVAR PONTE</button>
+        </div>
     </div>
 
+    <!-- TELA CHATS -->
+    <div id="screen-chats" class="screen active-screen">
+        <header>
+            <div class="header-title">WhatsApp <span>HELENA Core</span></div>
+        </header>
+        <div class="list-container" id="chat-list"></div>
+        <div style="position:fixed; bottom:80px; right:20px; width:55px; height:55px; background:var(--wa-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#white; font-size:1.8rem; cursor:pointer; z-index:100; box-shadow: 0 4px 8px rgba(0,0,0,0.3);" onclick="abrirContatos()">+</div>
+    </div>
+
+    <!-- TELA STATUS -->
     <div id="screen-status" class="screen">
-        <header><div class="header-title" style="color: gold;">Status</div></header>
+        <header><div class="header-title">Status</div></header>
         <div class="list-container">
             <div class="item" onclick="verMeuStatus()">
-                <div class="avatar" id="my-status-circle"></div>
+                <div class="avatar" id="my-status-circle">M</div>
                 <div class="item-info">
-                    <div class="item-name" style="color: gold;">Meu Status</div>
+                    <div class="item-name">Meu Status</div>
                     <div class="item-sub" id="my-status-time">Toque para adicionar atualização</div>
                 </div>
             </div>
             <div style="padding: 8px 16px; font-size: 0.8rem; color: var(--wa-text-muted); font-weight: 500;">Atualizações recentes</div>
             <div id="status-list"></div>
         </div>
-        <div style="position:fixed; bottom:80px; right:20px; width:55px; height:55px; background:var(--wa-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; cursor:pointer; z-index:100; box-shadow: 0 4px 8px rgba(0,0,0,0.3);" onclick="document.getElementById('status-media-in').click()">+</div>
+        <div style="position:fixed; bottom:80px; right:20px; width:55px; height:55px; background:var(--wa-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#white; font-size:1.8rem; cursor:pointer; z-index:100; box-shadow: 0 4px 8px rgba(0,0,0,0.3);" onclick="document.getElementById('status-media-in').click()">+</div>
     </div>
 
+    <!-- JANELA DO CHAT -->
     <div id="chat-window">
         <header style="height:65px; padding-bottom: 8px;">
             <div style="display:flex; align-items:center; gap:10px;">
                 <span onclick="fecharChat()" style="font-size:1.4rem; cursor:pointer; color: var(--wa-text-muted); padding-right: 5px;">←</span>
                 <div class="avatar" style="width:38px; height:38px; margin-right:0;" id="chat-header-avatar"></div>
                 <div>
-                    <div id="chat-header-name" style="font-weight:500; font-size:1rem; color: gold;">Nome</div>
+                    <div id="chat-header-name" style="font-weight:500; font-size:1rem;">Nome</div>
                     <div style="font-size: 0.7rem; color: var(--wa-green);">online</div>
                 </div>
             </div>
@@ -167,6 +188,7 @@
 
         <div id="chat-flow"></div>
 
+        <!-- INPUT E CONTROLES -->
         <div class="chat-input-area">
             <div class="input-wrapper">
                 <button class="btn-icon" onclick="toggleStickerDrawer()">😀</button>
@@ -179,19 +201,23 @@
             </button>
         </div>
 
+        <!-- GAVETA DE FIGURINHAS/GIFS -->
         <div id="sticker-drawer">
             <div class="drawer-tabs">
                 <button class="tab-btn active" onclick="switchDrawerTab('stickers')">FIGURINHAS</button>
                 <button class="tab-btn" onclick="switchDrawerTab('gifs')">GIFS</button>
             </div>
-            <div class="drawer-content" id="drawer-items"></div>
+            <div class="drawer-content" id="drawer-items">
+                <!-- Injetado dinamicamente -->
+            </div>
         </div>
     </div>
 
+    <!-- CALL SCREEN -->
     <div id="call-screen">
         <div style="text-align:center;">
             <div class="call-avatar" id="call-ui-avatar"></div>
-            <h2 id="call-ui-name" style="margin-top:20px; font-weight: 500; color: gold;">Nome</h2>
+            <h2 id="call-ui-name" style="margin-top:20px; font-weight: 500;">Nome</h2>
             <p id="call-ui-status" style="color:var(--wa-green); font-size: 0.9rem;">CHAMADA DE VOZ DO WHATSAPP</p>
         </div>
         <div style="display:flex; gap:40px;">
@@ -200,9 +226,11 @@
         </div>
     </div>
 
+    <!-- BANDEJA DE OPÇÕES DA MENSAGEM (LONG PRESS) -->
     <div id="options-modal" onclick="fecharOpcoes()">
         <div class="options-container" onclick="event.stopPropagation()">
             <div class="options-divider"></div>
+            <button class="options-btn" id="opt-save-btn" onclick="salvarMidiaOpcao()" style="display: none;">💾 Salvar na Galeria</button>
             <button class="options-btn" onclick="copiarMensagem()">📋 Copiar Texto</button>
             <button class="options-btn" onclick="compartilharMensagem()">📤 Compartilhar</button>
             <button class="options-btn options-btn-danger" onclick="apagarMensagem()">🗑️ Apagar Mensagem</button>
@@ -210,14 +238,17 @@
         </div>
     </div>
 
+    <!-- VISUALIZADOR STATUS -->
     <div id="status-viewer" onclick="this.style.display='none'">
-        <div style="width:100%; height:3px; background:rgba(255,255,255,0.3);"><div style="height:100%; width:0%; background:white;" id="status-prog"></div></div>
-        <div id="status-content" style="flex:1; display:flex; align-items:center; justify-content:center;"></div>
+        <div class="status-bar-container"><div class="status-bar"><div class="status-progress" id="status-prog"></div></div></div>
+        <div id="status-content" style="flex:1; display:flex; align-items:center; justify-content:center; background: black;"></div>
     </div>
 
+    <!-- INPUTS OCULTOS -->
     <input type="file" id="status-media-in" hidden accept="image/*,video/*" onchange="uploadMidia(this, 'status')">
     <input type="file" id="chat-media-in" hidden onchange="uploadMidia(this, 'chat')">
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="switchScreen('chats', this)">
             <svg viewBox="0 0 24 24"><path d="M12 2c-5.52 0-10 4.48-10 10 0 1.83.5 3.55 1.36 5.03l-1.36 5.03 5.16-1.33c1.43.76 3.05 1.21 4.84 1.21 5.52 0 10-4.48 10-10s-4.48-10-10-10zm0 18c-1.57 0-3.05-.44-4.33-1.21l-.31-.18-3.09.8 1.13-3.11-.2-.31c-.84-1.35-1.3-2.91-1.3-4.54 0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>
@@ -230,15 +261,54 @@
     </nav>
 
     <script>
-        const TK = "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";
-        const RP = "pradodalapa-hue/Tetstserbidor";
-        const REPO_SERVER = RP;
-        const REPO_MEDIA = RP;
-        const MASTER_TOKEN = TK;
-        let INDUSTRIAL_KEY = "";
-        let myChip = "92994776367", peer = null, currentCall = null, localStream = null, recorder = null, chunks = [];
+        // --- MOTOR PWA: MANIFESTO DINÂMICO E SERVICE WORKER ---
+        window.addEventListener('load', () => {
+            // Injeção do Manifesto PWA
+            const manifestObj = {
+                "name": "JDP SUPREME - WHATSAPP INDUSTRIAL",
+                "short_name": "JDP SUPREME",
+                "start_url": window.location.href,
+                "display": "standalone",
+                "background_color": "#0b141a",
+                "theme_color": "#202c33",
+                "orientation": "portrait",
+                "icons": [
+                    {
+                        "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%230b141a'><rect width='100' height='100' rx='20'/><circle cx='50' cy='50' r='30' fill='%2300a884'/><text x='50' y='58' fill='%23fde047' font-family='Orbitron' font-size='24' font-weight='bold' text-anchor='middle'>JDP</text></svg>",
+                        "sizes": "512x512",
+                        "type": "image/svg+xml",
+                        "purpose": "any maskable"
+                    }
+                ]
+            };
+            const manifestStr = encodeURIComponent(JSON.stringify(manifestObj));
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = 'data:application/manifest+json,' + manifestStr;
+            document.head.appendChild(manifestLink);
+
+            // Injeção do Service Worker
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+                self.addEventListener('fetch', e => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log("SW offline ativo"));
+        });
+
+        const MASTER_TOKEN = "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";
+        const REPO_SERVER = "pradodalapa-hue/Tetstserbidor";
+        const REPO_MEDIA = "pradodalapa-hue/fotos-industrial";
+        const INDUSTRIAL_KEY = "JDP_SUPREME_CORE_2024";
+
+        let myChip, peer, currentCall, localStream, recorder, chunks = [];
         let currentPartner = "", myStatusData = null;
-        let selectedMsgIndex = null;
+        let selectedMsgId = null; 
+        let db;
 
         const STICKER_DATABASE = [
             "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2F0MTBoZ3VnaXo5Z3lzZGlvOTMzdGZzN2FudGZ3d29xcmphMDUxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/X8baci2QrCOFIUtJKC/giphy.gif",
@@ -248,110 +318,144 @@
 
         const GIF_DATABASE = [
             "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBvNjE1NDFrMW9vY2QxY2k2bTI3bjM5MG9mdWR6NWx2bXF5M2RjNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Y2g/3o7TKSjRrfIPjei1fG/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm91aTRndHl4M3pweWsyMDR3YmIzdnpxOHU0eXNnd3B3NmZ3OWI0diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Y2g/Y8S98SGN9C7fy/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2ZhdGZ6dDk1bWFjNDN0OGI4YWZxbG1wdXNsbTh3NndqZHNqenpyeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Y2g/TeC7Q7ToOnWSc/giphy.gif"
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm91aTRndHl4M3pweWsyMDR3YmIzdnpxOHU0eXNnd3B3NmZ3OWI0diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Y2g/Y8S98SGN9C7fy/giphy.gif"
         ];
 
-        // Inicialização do Histórico de Chips no Index Integrado
-        window.addEventListener('DOMContentLoaded', () => {
-            carregarChipsSalvos();
-        });
-
-        function carregarChipsSalvos() {
-            const container = document.getElementById('index-saved-list');
-            const chips = JSON.parse(localStorage.getItem('jdp_chips_soberanos') || '[]');
-            container.innerHTML = "";
-            
-            if(chips.length === 0) {
-                container.innerHTML = `<div style="font-size:0.8rem; color:var(--wa-text-muted); text-align:center; padding:5px;">Nenhum chip registrado</div>`;
-                return;
-            }
-
-            chips.forEach(c => {
-                container.innerHTML += `
-                    <div class="chip-history-item" onclick="selecionarChipRapido('${c}')">
-                        <span>📱 ${c}</span>
-                        <span class="chip-history-del" onclick="deletarChipRapido(event, '${c}')">×</span>
-                    </div>
-                `;
+        // --- ENGENHARIA 1: INICIALIZAÇÃO DO BANCO (INDEXEDDB) ---
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open("JDP_WA_SUPREME_DB", 3);
+                request.onupgradeneeded = (e) => {
+                    db = e.target.result;
+                    if (!db.objectStoreNames.contains("mensagens")) {
+                        db.createObjectStore("mensagens", { keyPath: "id", autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains("contatos")) {
+                        db.createObjectStore("contatos", { keyPath: "num" });
+                    }
+                };
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve();
+                };
+                request.onerror = () => reject("Erro ao ativar IndexedDB.");
             });
         }
 
-        function selecionarChipRapido(num) {
-            document.getElementById('chip-number').value = num;
+        // --- OPERAÇÕES DO BANCO DE DADOS LOCAL ---
+        function salvarMensagemDB(partner, msg) {
+            return new Promise((resolve) => {
+                const tx = db.transaction("mensagens", "readwrite");
+                const store = tx.objectStore("mensagens");
+                msg.partner = partner;
+                const req = store.add(msg);
+                req.onsuccess = (e) => {
+                    msg.id = e.target.result;
+                    resolve(msg);
+                };
+            });
         }
 
-        function salvarNovoChipHistorico(num) {
-            let chips = JSON.parse(localStorage.getItem('jdp_chips_soberanos') || '[]');
-            if(!chips.includes(num)) {
-                chips.push(num);
-                localStorage.setItem('jdp_chips_soberanos', JSON.stringify(chips));
+        function carregarMensagensDB(partner) {
+            return new Promise((resolve) => {
+                const tx = db.transaction("mensagens", "readonly");
+                const store = tx.objectStore("mensagens");
+                const req = store.getAll();
+                req.onsuccess = () => {
+                    const filtradas = req.result.filter(m => m.partner === partner);
+                    resolve(filtradas);
+                };
+            });
+        }
+
+        // --- DELEÇÃO DE MENSAGENS LOCAL ---
+        function apagarMensagemDB(id) {
+            return new Promise((resolve) => {
+                const tx = db.transaction("mensagens", "readwrite");
+                const store = tx.objectStore("mensagens");
+                store.delete(id).onsuccess = () => resolve();
+            });
+        }
+
+        function salvarContatoDB(num, nome) {
+            return new Promise((resolve) => {
+                const tx = db.transaction("contatos", "readwrite");
+                const store = tx.objectStore("contatos");
+                store.put({num, nome}).onsuccess = () => resolve();
+            });
+        }
+
+        function carregarContatosDB() {
+            return new Promise((resolve) => {
+                const tx = db.transaction("contatos", "readonly");
+                const store = tx.objectStore("contatos");
+                store.getAll().onsuccess = (e) => resolve(e.target.result);
+            });
+        }
+
+        // --- ENGENHARIA DE PERMISSÃO E SALVAMENTO DE MÍDIA ---
+        function verificarPermissaoArmazenamento() {
+            return localStorage.getItem("jdp_storage_permission") === "granted";
+        }
+
+        function solicitarPermissaoArmazenamento() {
+            return new Promise((resolve) => {
+                if(verificarPermissaoArmazenamento()) {
+                    resolve(true);
+                } else {
+                    const modal = document.getElementById("permission-modal");
+                    modal.style.display = "flex";
+                    window.resolvePermission = (status) => {
+                        modal.style.display = "none";
+                        localStorage.setItem("jdp_storage_permission", status ? "granted" : "denied");
+                        resolve(status);
+                    };
+                }
+            });
+        }
+
+        function concederPermissao() { if(window.resolvePermission) window.resolvePermission(true); }
+        function negarPermissao() { if(window.resolvePermission) window.resolvePermission(false); }
+
+        async function salvarMidiaNoDispositivo(url, type) {
+            const autorizado = await solicitarPermissaoArmazenamento();
+            if(!autorizado) {
+                alert("Acesso negado. Não foi possível salvar o arquivo.");
+                return;
             }
-            carregarChipsSalvos();
-        }
 
-        function deletarChipRapido(event, num) {
-            event.stopPropagation();
-            let chips = JSON.parse(localStorage.getItem('jdp_chips_soberanos') || '[]');
-            chips = chips.filter(c => c !== num);
-            localStorage.setItem('jdp_chips_soberanos', JSON.stringify(chips));
-            carregarChipsSalvos();
-        }
-
-        async function autenticarSistema() {
-            myChip = document.getElementById('chip-number').value.trim();
-            const passInput = document.getElementById('chip-pass').value;
-            if(!myChip || !passInput) return alert("Preencha o ID e a Senha.");
-
+            document.getElementById('sync-loader').style.display = 'block';
             try {
-                const r = await fetch(`https://raw.githubusercontent.com/${RP}/main/pasta_chip/${myChip}/seguranca.json?t=` + Date.now());
-                if(!r.ok) throw new Error("Erro ao buscar credenciais.");
-                const d = await r.json();
-                                 
-                if(passInput === d.senha) {
-                    INDUSTRIAL_KEY = d.senha;
-                    salvarNovoChipHistorico(myChip);
-                    document.getElementById('setup-overlay').style.display = 'none';
-                                         
-                    peer = new Peer("JDP-CHIP-" + myChip);
-                    peer.on('open', () => {
-                        setInterval(motorPIB, 5000);
-                        carregarListas();
-                    });
-                    peer.on('call', c => {
-                        currentCall = c;
-                        mostrarTelaChamada("Chamada Recebida", true);
-                    });
-                } else {
-                    alert("ACESSO NEGADO: Senha incorreta.");
-                }
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                
+                const ext = type === 'audio' ? 'ogg' : (type === 'video' ? 'mp4' : 'jpg');
+                link.download = `JDP_MIDIA_${Date.now()}.${ext}`;
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
             } catch(e) {
-                // Bypass de Segurança do Criador com a senha mestre
-                if(passInput === "Princesa Diamante") {
-                    INDUSTRIAL_KEY = "Princesa Diamante";
-                    salvarNovoChipHistorico(myChip);
-                    document.getElementById('setup-overlay').style.display = 'none';
-                    peer = new Peer("JDP-CHIP-" + myChip);
-                    peer.on('open', () => {
-                        setInterval(motorPIB, 5000);
-                        carregarListas();
-                    });
-                    peer.on('call', c => {
-                        currentCall = c;
-                        mostrarTelaChamada("Chamada Recebida", true);
-                    });
-                } else {
-                    alert("Erro de conexão com o servidor industrial ou ID inexistente.");
-                }
+                alert("Erro ao gravar arquivo no armazenamento local.");
             }
+            document.getElementById('sync-loader').style.display = 'none';
         }
 
+        // --- CONTROLE DE ROLAGEM INTELIGENTE ---
         function forcarDescidaChat(smooth = true) {
             const flow = document.getElementById('chat-flow');
             if(!flow) return;
             setTimeout(() => {
                 flow.scrollTo({ top: flow.scrollHeight + 10000, behavior: smooth ? 'smooth' : 'auto' });
             }, 50);
+            setTimeout(() => {
+                flow.scrollTo({ top: flow.scrollHeight + 10000, behavior: smooth ? 'smooth' : 'auto' });
+            }, 250);
         }
 
         if (window.visualViewport) {
@@ -365,6 +469,7 @@
             forcarDescidaChat(true);
         });
 
+        // --- GAVETA DE ADESIVOS / GIFS ---
         function toggleStickerDrawer() {
             const drawer = document.getElementById('sticker-drawer');
             if(drawer.style.display === 'flex') {
@@ -388,9 +493,9 @@
 
             const container = document.getElementById('drawer-items');
             container.innerHTML = "";
-            const db = type === 'stickers' ? STICKER_DATABASE : GIF_DATABASE;
+            const dbList = type === 'stickers' ? STICKER_DATABASE : GIF_DATABASE;
 
-            db.forEach(url => {
+            dbList.forEach(url => {
                 container.innerHTML += `
                     <div class="drawer-item" onclick="enviarStickerGif('${url}', '${type}')">
                         <img src="${url}">
@@ -405,10 +510,36 @@
             fecharStickerDrawer();
         }
 
+        // --- AUTENTICAÇÃO SUPREMA (SENHA OPERACIONAL: JDP123) ---
+        async function autenticar() {
+            myChip = document.getElementById('chip-number').value;
+            const key = document.getElementById('key-input').value;
+
+            if(!myChip || key !== "JDP123") {
+                alert("CHAVE DE ACESSO REJEITADA.");
+                return;
+            }
+
+            await initDB();
+            
+            peer = new Peer("JDP-CHIP-" + myChip);
+            peer.on('open', () => {
+                document.getElementById('setup-overlay').style.display = 'none';
+                setInterval(motorPIB, 5000);
+                carregarListas();
+            });
+
+            peer.on('call', c => {
+                currentCall = c;
+                mostrarTelaChamada("Chamada Recebida", true);
+            });
+        }
+
+        // --- MOTOR PIB (POLLING SEGURO) ---
         async function motorPIB() {
             const pathMsg = `pasta_chip/${myChip}/mensagens.json`;
             try {
-                const res = await fetch(`https://api.github.com/repos/${REPO_SERVER}/contents/${pathMsg}?t=` + Date.now(), {
+                const res = await fetch(`https://api.github.com/repos/${REPO_SERVER}/contents/${pathMsg}?t=${Date.now()}`, {
                     headers: { 'Authorization': `token ${MASTER_TOKEN}` }
                 });
                 if(res.ok) {
@@ -419,10 +550,10 @@
                         for(let enc of cofre) {
                             const bytes = CryptoJS.AES.decrypt(enc, INDUSTRIAL_KEY);
                             const dec = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-                            salvarLocal(dec.sender, dec);
+                            
+                            const salvo = await salvarMensagemDB(dec.sender, dec);
                             if(currentPartner === dec.sender) {
-                                const hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${currentPartner}`) || '[]');
-                                renderMsg(dec, 'them', hist.length - 1, true);
+                                renderMsg(salvo, 'them', salvo.id, true);
                             }
                         }
                         await limparServidor(pathMsg, data.sha);
@@ -433,7 +564,7 @@
 
             const pathCall = `pasta_chip/${myChip}/chamada.json`;
             try {
-                const resC = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/${pathCall}?t=` + Date.now());
+                const resC = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/${pathCall}?t=${Date.now()}`);
                 if(resC.ok) {
                     const cData = await resC.json();
                     if(cData.active && !currentCall) {
@@ -446,6 +577,7 @@
             if(document.getElementById('screen-status').classList.contains('active-screen')) carregarStatusGeral();
         }
 
+        // --- TRANSPORTE DE MÍDIA ---
         async function uploadMidia(el, mode) {
             const file = el.files[0];
             if(!file) return;
@@ -472,10 +604,15 @@
         }
 
         async function transmitir(type, val) {
-            const msgObj = { sender: myChip, type, val, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) };
-            salvarLocal(currentPartner, msgObj);
-            const hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${currentPartner}`) || '[]');
-            renderMsg(msgObj, 'me', hist.length - 1, true);
+            const msgObj = { 
+                sender: myChip, 
+                type, 
+                val, 
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) 
+            };
+            
+            const salvo = await salvarMensagemDB(currentPartner, msgObj);
+            renderMsg(salvo, 'me', salvo.id, true);
             
             const enc = CryptoJS.AES.encrypt(JSON.stringify(msgObj), INDUSTRIAL_KEY).toString();
             const path = `pasta_chip/${currentPartner}/mensagens.json`;
@@ -503,6 +640,7 @@
             forcarDescidaChat(true);
         }
 
+        // --- ÁUDIO ---
         async function startRec() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -517,7 +655,7 @@
                 };
                 recorder.start();
                 document.getElementById('rec-btn').style.color = '#ea4335';
-            } catch(e) { alert("ERRO AO ACESSAR MICROFONE."); }
+            } catch(e) { alert("ERRO MICROFONE."); }
         }
 
         function stopRec() {
@@ -527,6 +665,7 @@
             }
         }
 
+        // --- CHAMADAS ---
         async function iniciarChamadaGlobal() {
             mostrarTelaChamada("Iniciando...");
             const callSignal = { active: true, callerName: "Sr. José (Criador)" };
@@ -568,6 +707,7 @@
             document.getElementById('btn-answer').style.display = incoming ? 'flex' : 'none';
         }
 
+        // --- STATUS ---
         async function postarStatusFinal(type, url) {
             const statusObj = { url, type, time: new Date().toLocaleTimeString() };
             const path = `pasta_chip/${myChip}/status.json`;
@@ -585,22 +725,22 @@
 
         async function carregarStatusGeral() {
             try {
-                const res = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/pasta_chip/${myChip}/status.json?t=` + Date.now());
+                const res = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/pasta_chip/${myChip}/status.json?t=${Date.now()}`);
                 if(res.ok) {
                     myStatusData = await res.json();
                     document.getElementById('my-status-circle').style.backgroundImage = `url(${myStatusData.url})`;
                 }
             } catch(e) {}
 
-            const agenda = JSON.parse(localStorage.getItem('jdp_contatos_'+myChip) || '[]');
+            const agenda = await carregarContatosDB();
             const list = document.getElementById('status-list');
             list.innerHTML = "";
             for(let c of agenda) {
                 try {
-                    const r = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/pasta_chip/${c.num}/status.json?t=` + Date.now());
+                    const r = await fetch(`https://raw.githubusercontent.com/${REPO_SERVER}/main/pasta_chip/${c.num}/status.json?t=${Date.now()}`);
                     if(r.ok) {
                         const s = await r.json();
-                        list.innerHTML += `<div class="item" onclick='verStatus(${JSON.stringify(s)})'><div class="avatar" style="background-image:url(${s.url})"></div><div class="item-info"><div class="item-name" style="color: gold;">${c.nome}</div><div class="item-sub">${s.time}</div></div></div>`;
+                        list.innerHTML += `<div class="item" onclick='verStatus(${JSON.stringify(s)})'><div class="avatar" style="background-image:url(${s.url})"></div><div class="item-info"><div class="item-name">${c.nome}</div><div class="item-sub">${s.time}</div></div></div>`;
                     }
                 } catch(e) {}
             }
@@ -616,6 +756,7 @@
             setTimeout(() => v.style.display = 'none', 5100);
         }
 
+        // --- AUXILIARES ---
         async function getSha(path) {
             const res = await fetch(`https://api.github.com/repos/${REPO_SERVER}/contents/${path}`, {
                 headers: { 'Authorization': `token ${MASTER_TOKEN}` }
@@ -623,58 +764,106 @@
             return res.ok ? (await res.json()).sha : null;
         }
 
+        // --- DETECÇÃO DE TOQUE LONGO (LONG PRESS) ---
         let touchTimer;
-        function configurarToqueLongo(element, index) {
-            element.addEventListener('touchstart', () => { touchTimer = setTimeout(() => abrirOpcoes(index), 600); });
+        function configurarToqueLongo(element, id) {
+            element.addEventListener('touchstart', (e) => {
+                touchTimer = setTimeout(() => {
+                    abrirOpcoes(id);
+                }, 600);
+            });
+
             element.addEventListener('touchend', () => clearTimeout(touchTimer));
             element.addEventListener('touchmove', () => clearTimeout(touchTimer));
 
-            element.addEventListener('mousedown', () => { touchTimer = setTimeout(() => abrirOpcoes(index), 600); });
+            element.addEventListener('mousedown', () => {
+                touchTimer = setTimeout(() => {
+                    abrirOpcoes(id);
+                }, 600);
+            });
             element.addEventListener('mouseup', () => clearTimeout(touchTimer));
             element.addEventListener('mouseleave', () => clearTimeout(touchTimer));
         }
 
-        function abrirOpcoes(index) {
-            selectedMsgIndex = index;
-            document.getElementById('options-modal').style.display = 'flex';
+        // --- SISTEMA DE BANDEJA DE OPÇÕES ---
+        function abrirOpcoes(id) {
+            selectedMsgId = id;
+            
+            const tx = db.transaction("mensagens", "readonly");
+            const store = tx.objectStore("mensagens");
+            store.get(id).onsuccess = (e) => {
+                const msg = e.target.result;
+                const saveBtn = document.getElementById('opt-save-btn');
+                if(msg && (msg.type === 'image' || msg.type === 'img' || msg.type === 'video' || msg.type === 'audio')) {
+                    saveBtn.style.display = 'flex';
+                } else {
+                    saveBtn.style.display = 'none';
+                }
+                document.getElementById('options-modal').style.display = 'flex';
+            };
         }
 
         function fecharOpcoes() {
             document.getElementById('options-modal').style.display = 'none';
-            selectedMsgIndex = null;
+            selectedMsgId = null;
+        }
+
+        function salvarMidiaOpcao() {
+            if(selectedMsgId === null) return;
+            const tx = db.transaction("mensagens", "readonly");
+            const store = tx.objectStore("mensagens");
+            store.get(selectedMsgId).onsuccess = (e) => {
+                const msg = e.target.result;
+                if(msg && msg.val) {
+                    salvarMidiaNoDispositivo(msg.val, msg.type);
+                }
+            };
+            fecharOpcoes();
         }
 
         function copiarMensagem() {
-            if(selectedMsgIndex === null) return;
-            const hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${currentPartner}`) || '[]');
-            const msg = hist[selectedMsgIndex];
-            if(msg && msg.val) navigator.clipboard.writeText(msg.val);
+            if(selectedMsgId === null) return;
+            const tx = db.transaction("mensagens", "readonly");
+            const store = tx.objectStore("mensagens");
+            store.get(selectedMsgId).onsuccess = (e) => {
+                const msg = e.target.result;
+                if(msg && msg.val) {
+                    navigator.clipboard.writeText(msg.val);
+                }
+            };
             fecharOpcoes();
         }
 
         function compartilharMensagem() {
-            if(selectedMsgIndex === null) return;
-            const hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${currentPartner}`) || '[]');
-            const msg = hist[selectedMsgIndex];
-            if (navigator.share && msg) {
-                navigator.share({ title: 'JDP SUPREME', text: msg.val || 'Mídia', url: msg.type !== 'txt' ? msg.val : undefined }).catch(() => {});
-            } else {
-                alert("Texto copiado: " + (msg.val || ''));
-            }
+            if(selectedMsgId === null) return;
+            const tx = db.transaction("mensagens", "readonly");
+            const store = tx.objectStore("mensagens");
+            store.get(selectedMsgId).onsuccess = (e) => {
+                const msg = e.target.result;
+                if (navigator.share && msg) {
+                    navigator.share({
+                        title: 'JDP SUPREME',
+                        text: msg.val || 'Arquivo de Mídia',
+                        url: msg.type !== 'txt' ? msg.val : undefined
+                    }).catch(() => {});
+                } else if(msg) {
+                    alert("Copiado para compartilhar: " + (msg.val || ''));
+                }
+            };
             fecharOpcoes();
         }
 
-        function apagarMensagem() {
-            if(selectedMsgIndex === null) return;
-            let hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${currentPartner}`) || '[]');
-            hist.splice(selectedMsgIndex, 1);
-            localStorage.setItem(`chat_${myChip}_${currentPartner}`, JSON.stringify(hist));
+        async function apagarMensagem() {
+            if(selectedMsgId === null) return;
+            await apagarMensagemDB(selectedMsgId);
+            fecharOpcoes();
+            
             document.getElementById('chat-flow').innerHTML = "";
-            hist.forEach((m, idx) => renderMsg(m, m.sender === myChip ? 'me' : 'them', idx, false));
-            fecharOpcoes();
+            const historico = await carregarMensagensDB(currentPartner);
+            historico.forEach(m => renderMsg(m, m.sender === myChip ? 'me' : 'them', m.id, false));
         }
 
-        function renderMsg(m, side, index, smooth = false) {
+        function renderMsg(m, side, id, smooth = false) {
             const flow = document.getElementById('chat-flow');
             let content = m.val;
             let isSticker = m.type === 'sticker';
@@ -684,19 +873,16 @@
             if(m.type === 'video') content = `<video src="${m.val}" controls></video>`;
             if(isSticker) content = `<img src="${m.val}">`;
             
+            const classes = isSticker ? 'msg msg-sticker' : `msg msg-${side}`;
+            
             const msgDiv = document.createElement('div');
-            msgDiv.className = isSticker ? 'msg msg-sticker' : `msg msg-${side}`;
+            msgDiv.className = classes;
             msgDiv.innerHTML = `${content}<span class="msg-time">${m.time}</span>`;
             
-            configurarToqueLongo(msgDiv, index);
+            configurarToqueLongo(msgDiv, id);
+            
             flow.appendChild(msgDiv);
             forcarDescidaChat(smooth);
-        }
-
-        function salvarLocal(partner, msg) {
-            let hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${partner}`) || '[]');
-            hist.push(msg);
-            localStorage.setItem(`chat_${myChip}_${partner}`, JSON.stringify(hist));
         }
 
         async function limparServidor(path, sha) {
@@ -707,38 +893,43 @@
             });
         }
 
-        function abrirChat(num, nome) {
+        async function abrirChat(num, nome) {
             currentPartner = num;
             document.getElementById('chat-header-name').innerText = nome;
+            
+            const avatar = document.getElementById('chat-header-avatar');
+            avatar.innerText = nome.charAt(0).toUpperCase();
+            avatar.style.backgroundImage = "none";
+
             document.getElementById('chat-window').style.display = 'flex';
             document.getElementById('chat-flow').innerHTML = "";
-            const hist = JSON.parse(localStorage.getItem(`chat_${myChip}_${num}`) || '[]');
-            hist.forEach((m, idx) => renderMsg(m, m.sender === myChip ? 'me' : 'them', idx, false));
+            
+            const historico = await carregarMensagensDB(num);
+            historico.forEach(m => renderMsg(m, m.sender === myChip ? 'me' : 'them', m.id, false));
             forcarDescidaChat(false);
         }
 
-        function fecharChat() {
-            document.getElementById('chat-window').style.display = 'none';
-            currentPartner = "";
+        function fecharChat() { 
+            document.getElementById('chat-window').style.display = 'none'; 
+            currentPartner = ""; 
             fecharStickerDrawer();
         }
 
-        function carregarListas() {
-            const agenda = JSON.parse(localStorage.getItem('jdp_contatos_'+myChip) || '[]');
+        async function carregarListas() {
+            const agenda = await carregarContatosDB();
             const list = document.getElementById('chat-list');
             list.innerHTML = "";
             agenda.forEach(c => {
-                list.innerHTML += `<div class="item" onclick="abrirChat('${c.num}', '${c.nome}')"><div class="avatar"></div><div class="item-info"><div class="item-name" style="color: gold;">${c.nome}</div><div class="item-sub">ID: ${c.num}</div></div></div>`;
+                const inicial = c.nome.charAt(0).toUpperCase();
+                list.innerHTML += `<div class="item" onclick="abrirChat('${c.num}', '${c.nome}')"><div class="avatar">${inicial}</div><div class="item-info"><div class="item-name">${c.nome}</div><div class="item-sub">ID: ${c.num}</div></div></div>`;
             });
         }
 
-        function abrirContatos() {
+        async function abrirContatos() {
             const num = prompt("ID CHIP:");
             const nome = prompt("NOME:");
             if(num && nome) {
-                let agenda = JSON.parse(localStorage.getItem('jdp_contatos_'+myChip) || '[]');
-                agenda.push({num, nome});
-                localStorage.setItem('jdp_contatos_'+myChip, JSON.stringify(agenda));
+                await salvarContatoDB(num, nome);
                 carregarListas();
             }
         }
@@ -753,4 +944,4 @@
         function verMeuStatus() { if(myStatusData) verStatus(myStatusData); }
     </script>
 </body>
-</html>
+    </html>
